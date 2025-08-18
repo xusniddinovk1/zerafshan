@@ -12,7 +12,7 @@ class Product(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
-    price = models.DecimalField(max_digits=5, decimal_places=3)
+    price = models.DecimalField(max_digits=12, decimal_places=2)
     stock = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_created=True)
 

@@ -1,4 +1,6 @@
 from datetime import date
+from decimal import Decimal
+
 from rest_framework import serializers
 from ..models import Order, OrderItem
 from ..models.order import InstallmentPayment
@@ -53,7 +55,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
         # Agar installment bo‘lsa -> jadval yaratamiz
         if order.payment_type == "installment":
-            monthly_amount = round(total / order.installment_months, 2)
+            monthly_amount = (total / Decimal(order.installment_months)).quantize(Decimal("0.01"))
             today = date.today()
             for i in range(1, order.installment_months + 1):
                 due_date = today + relativedelta(months=i)

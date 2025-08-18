@@ -19,7 +19,7 @@ class Order(models.Model):
     phone_number = models.CharField(max_length=13, validators=[phone_regex], unique=True)
     payment_type = models.CharField(max_length=20, choices=PAYMENT_TYPE_CHOICES)
     installment_months = models.PositiveIntegerField(choices=INSTALLMENT_CHOICES)
-    total_price = models.DecimalField(max_digits=5, decimal_places=3, default=0)
+    total_price = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
