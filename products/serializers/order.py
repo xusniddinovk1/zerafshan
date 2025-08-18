@@ -4,6 +4,7 @@ from ..models import Order, OrderItem
 from ..models.order import InstallmentPayment
 from dateutil.relativedelta import relativedelta
 
+
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
@@ -13,7 +14,8 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 class InstallmentPaymentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ['id', 'month_number', 'amount', 'due_date', 'is_paid']
+        model = InstallmentPayment
+        fields = ['id', 'month_number', 'amount', 'due_date', 'is_paid']
 
 
 class OrderSerializer(serializers.ModelSerializer):
