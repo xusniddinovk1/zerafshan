@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from users.models import phone_regex
-from rest_framework.response import Response
 
 
 class LoginSerializer(serializers.Serializer):
