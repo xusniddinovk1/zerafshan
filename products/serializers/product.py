@@ -1,8 +1,9 @@
-from rest_framework import serializers, status
+from rest_framework import serializers, status, generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from . import InstallmentPaymentSerializer
 from ..models import Category, Product
 from ..models.order import InstallmentPayment
 
@@ -19,18 +20,27 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'description', 'category', 'price', 'stock', 'created_at']
 
 
-class InstallmentPayView(APIView):
+class InstallmentPayView(generics.UpdateAPIView):
+    queryset = InstallmentPayment.objects.all()
+    serializer_class = InstallmentPaymentSerializer
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, pk):
-        try:
-            installment = InstallmentPayment.objects.get(pk=pk, order__user=request.user)
-        except InstallmentPayment.DoesNotExist:
-            return Response({"error": "Topilmadi"}, status=status.HTTP_404_NOT_FOUND)
+    def get_queryset(self):
+        return self.queryset.filter(order__user=self.request.user)
+
+    def update(self, request, *args, **kwargs):
+        installment = self.get_object()
 
         if installment.is_paid:
-            return Response({"message": "Bu to‘lov allaqachon qilingan"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "Bu oy uchun to‘lov allaqachon amalga oshirilgan."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         installment.is_paid = True
         installment.save()
-        return Response({"message": f"{installment.month_number}-oy to‘lov qabul qilindi ✅"})
+
+        return Response(
+            {"detail": f"{installment.month_number}-oy uchun to‘lov qabul qilindi."},
+            status=status.HTTP_200_OK
+        )
