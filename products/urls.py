@@ -1,8 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .serializers.product import InstallmentPayView
 from .views.order import OrderCreateView, OrderListView
-from .views.product import CategoryViewSet, ProductViewSet
+from .views.product import CategoryViewSet, ProductViewSet, InstallmentPayView
 
 router = DefaultRouter()
 router.register(r'categories', CategoryViewSet)
